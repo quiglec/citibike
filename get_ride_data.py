@@ -1,5 +1,6 @@
 import boto3
 import subprocess
+import sys
 import logging
 
 #Initialize s3 bucket
