@@ -42,7 +42,7 @@ def copy_ride_files_s3_2_hdfs(trip_bucket, hdfs_dir, ride_files):
     """
     Copy files from s3 to hdfs directory
     """
-    for file in ride files:
+    for file in ride_files:
         subprocess.check_output(f'hdfs dfs -cp https://s3.amazonaws.com/{trip_bucket}/{file} {hdfs_dir}')
 
 def main():
@@ -70,4 +70,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
