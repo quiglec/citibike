@@ -41,7 +41,7 @@ def get_hdfs_ride_files(hdfs_dir: str) -> list:
     """
     Return list of ride files already stored in HDFS
     """
-    output = subprocess.check_output(f'hdfs dfs -ls {hdfs_dir}', shell=True)
+    output = subprocess.check_output(f'hdfs dfs -ls {hdfs_dir}', shell=  True)
     files = str(output).split(hdfs_dir)[1].strip('/').split(r'\\n')[0]
     return files
 
@@ -62,7 +62,7 @@ def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
     for file in ride_files:
         logger.info(f'hdfs dfs -cp {url}{file} {hdfs_dir}')
         print(f'hdfs dfs -cp {url}{file} {hdfs_dir}')
-        subprocess.check_output(f'hdfs dfs -cp {url}{file} {hdfs_dir}')
+        subprocess.check_output(f'hdfs dfs -cp {url}{file} {hdfs_dir}', shell = True)
 
 def main():
     try:
