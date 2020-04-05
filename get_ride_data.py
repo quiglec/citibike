@@ -55,12 +55,13 @@ def find_file_diff(s3_files: list, hdfs_files: list) -> list:
             diff.append(file)
     return diff
 
-def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir, ride_files):
+def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
     """
     Copy files from s3 to hdfs directory
     """
     for file in ride_files:
         logger.info(f'hdfs dfs -cp {url}/{file} {hdfs_dir}')
+        printf'hdfs dfs -cp {url}/{file} {hdfs_dir}')
         subprocess.check_output(f'hdfs dfs -cp {url}/{file} {hdfs_dir}')
 
 def main():
