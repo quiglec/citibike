@@ -5,13 +5,6 @@ import logging
 from bs4 import BeautifulSoup
 import requests
 
-"""
-#Initialize s3 bucket
-bucket_name = 'tripdata'
-s3 = boto3.resource('s3')
-trip_bucket = s3.Bucket(bucket_name)
-"""
-
 #s3 bucket URL
 URL = "https://s3.amazonaws.com/tripdata/"
 
@@ -19,23 +12,14 @@ URL = "https://s3.amazonaws.com/tripdata/"
 trip_hdfs = '/user/clsadmin/data'
 
 def get_s3_ride_files(url: str) -> list:
+    """
+    Return list of ride files stored in CitiBike s3
+    """
     r = requests.get(URL)
     soup = BeautifulSoup(r.content, 'html5lib')
     all_files = [key.text for key in soup.findAll('key')]
     ride_files = [x for x in all_files if x[:2]=='20' and x.count('-')<3]
     return ride_files
-
-"""
-def get_s3_ride_files(trip_bucket) -> list:
-
-    #Return list of ride files stored in CitiBike s3
-
-    all_files = []
-    for file in trip_bucket.objects.all():
-        all_files.append(file.key)
-    ride_files = [x for x in all_files if x[:2]=='20' and x.count('-')<3]
-    return ride_files
-"""
 
 def get_hdfs_ride_files(hdfs_dir: str) -> list:
     """
@@ -63,6 +47,12 @@ def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
         logger.info(f'hdfs dfs -cp {url}{file} {hdfs_dir}')
         print(f'hdfs dfs -cp {url}{file} {hdfs_dir}')
         subprocess.check_output(f'hdfs dfs -cp {url}{file} {hdfs_dir}', shell = True)
+        subprocess.check_output(f'hdfs dfs -get {hdfs_dir}/{file} data', shell = True)
+        subprocess.check_output(f'hdfs dfs -rm {hdfs_dir}/{file}', shell = True)
+        subprocess.check_output(f'unzip data/{file}', shell = True)
+        subprocess.check_output(f'rm data/{file}', shell = True)
+        subprocess.check_output(f'hdfs dfs -put data/* {hdfs_dir}' shell = True)
+
 
 def main():
     try:
