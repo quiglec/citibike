@@ -53,7 +53,7 @@ def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
         subprocess.check_output(f'unzip data/{file} -d data', shell = True)
         subprocess.check_output(f'rm -rf data/__MACOSX', shell = True)
         subprocess.check_output(f'rm -rf data/{file}', shell = True)
-        subprocess.check_output(f'mv data/* data/{file.strip('.csv.zip').strip('.zip')+'.csv'}', shell = True)      
+        subprocess.check_output(f'mv data/* data/{file.split('.')[0]+'.csv'}', shell = True)      
         subprocess.check_output(f'hdfs dfs -put data/* {hdfs_dir}', shell = True)
         subprocess.check_output(f'rm data/*', shell = True)
 
