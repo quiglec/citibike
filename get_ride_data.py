@@ -25,7 +25,7 @@ def get_hdfs_ride_files(hdfs_dir: str) -> list:
     """
     Return list of ride files already stored in HDFS
     """
-    output = subprocess.check_output(f'hdfs dfs -ls {hdfs_dir}', shell=  True)
+    output = subprocess.check_output(f'hdfs dfs -ls {hdfs_dir}', shell = True)
     files = str(output).split(hdfs_dir)[1].strip('/').split(r'\\n')[0]
     return files
 
