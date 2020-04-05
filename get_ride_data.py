@@ -2,24 +2,40 @@ import boto3
 import subprocess
 import sys
 import logging
+from bs4 import BeautifulSoup
+import requests
 
+"""
 #Initialize s3 bucket
 bucket_name = 'tripdata'
 s3 = boto3.resource('s3')
 trip_bucket = s3.Bucket(bucket_name)
+"""
+
+#s3 bucket URL
+URL = "https://s3.amazonaws.com/tripdata/"
 
 #Define target directory
 trip_hdfs = '/user/clsadmin/data'
 
+def get_s3_ride_files(url) -> list:
+    r = requests.get(URL)
+    soup = BeautifulSoup(r.content, 'html5lib')
+    all_files = [key.text for key in soup.findAll('key')]
+    ride_files = [x for x in all_files if x[:2]=='20' and x.count('-')<3]
+    return ride_files
+
+"""
 def get_s3_ride_files(trip_bucket) -> list:
-    """
-    Return list of ride files stored in CitiBike s3
-    """
+
+    #Return list of ride files stored in CitiBike s3
+
     all_files = []
     for file in trip_bucket.objects.all():
         all_files.append(file.key)
     ride_files = [x for x in all_files if x[:2]=='20' and x.count('-')<3]
     return ride_files
+"""
 
 def get_hdfs_ride_files(hdfs_dir) -> list:
     """
@@ -49,7 +65,7 @@ def copy_ride_files_s3_2_hdfs(trip_bucket, hdfs_dir, ride_files):
 def main():
     try:
         logger.info('Finding s3 files...')
-        s3_files = get_s3_ride_files(trip_bucket)
+        s3_files = get_s3_ride_files(URL)
     except Exception:
         logger.error('Could not read s3 files')
         sys.exit(-1)
