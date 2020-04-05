@@ -61,7 +61,7 @@ def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
     """
     for file in ride_files:
         logger.info(f'hdfs dfs -cp {url}/{file} {hdfs_dir}')
-        printf'hdfs dfs -cp {url}/{file} {hdfs_dir}')
+        print(f'hdfs dfs -cp {url}/{file} {hdfs_dir}')
         subprocess.check_output(f'hdfs dfs -cp {url}/{file} {hdfs_dir}')
 
 def main():
