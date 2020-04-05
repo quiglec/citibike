@@ -89,7 +89,7 @@ def main():
 
     try: 
         logger.info('Retrieving missing files...')
-        copy_ride_files_s3_2_hdfs(URL, trip_hdfs, hdfs_files)
+        copy_ride_files_s3_2_hdfs(URL, trip_hdfs, files_2_copy)
     except Exception:
         logger.error('Unable to retrieve latest ride files')
 
