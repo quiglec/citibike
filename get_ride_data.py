@@ -78,12 +78,17 @@ def main():
         sys.exit(-1)
 
     try: 
-        logger.info('Retrieving missing files...')
+        logger.info('Identifying missing files...')
         files_2_copy = find_file_diff(s3_files, hdfs_files)
+    except Exception:
+        logger.error('Unable to identify latest ride files')
+        sys.exit(-1)
+
+    try: 
+        logger.info('Retrieving missing files...')
         copy_ride_files_s3_2_hdfs(URL, trip_hdfs, hdfs_files)
     except Exception:
         logger.error('Unable to retrieve latest ride files')
-        sys.exit(-1)
 
 if __name__ == "__main__":
     logger = logging.getLogger(__name__)
