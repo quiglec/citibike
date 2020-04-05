@@ -25,8 +25,9 @@ def get_hdfs_ride_files(hdfs_dir: str) -> list:
     """
     Return list of ride files already stored in HDFS
     """
+    files = []
     output = subprocess.check_output(f'hdfs dfs -ls {hdfs_dir}', shell = True)
-    files = str(output).split(hdfs_dir)[1].strip('/').split(r'\\n')[0]
+    files.append(str(output).split(hdfs_dir)[1].strip('/').split(r'\\n')[0])
     return files
 
 def find_file_diff(s3_files: list, hdfs_files: list) -> list:
