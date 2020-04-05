@@ -62,7 +62,7 @@ def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
     for file in ride_files:
         logger.info(f'hdfs dfs -cp {url}/{file} {hdfs_dir}')
         print(f'hdfs dfs -cp {url}/{file} {hdfs_dir}')
-        subprocess.check_output(f'hdfs dfs -cp {url}/{file} {hdfs_dir}')
+        subprocess.check_output(f'hdfs dfs -cp {url}{file} {hdfs_dir}')
 
 def main():
     try:
@@ -82,6 +82,7 @@ def main():
     try: 
         logger.info('Identifying missing files...')
         files_2_copy = find_file_diff(s3_files, hdfs_files)
+        print(files_2_copy)
     except Exception:
         logger.error('Unable to identify latest ride files')
         sys.exit(-1)
