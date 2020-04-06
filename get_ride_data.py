@@ -9,7 +9,7 @@ import requests
 URL = "https://s3.amazonaws.com/tripdata/"
 
 #Define target directory
-trip_hdfs = '/user/clsadmin/data'
+trip_hdfs = '/user/clsadmin/data1'
 
 def get_s3_ride_files(url: str) -> list:
     """
@@ -40,9 +40,17 @@ def find_file_diff(s3_files: list, hdfs_files: list) -> list:
             diff.append(file)
     return diff
 
-def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
+def copy_ride_files_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
     """
     Copy files from s3 to hdfs directory
+    """
+
+    for file in ride_files:
+        subprocess.check_output(f'wget {url}{file} data')
+    for file in ride_files:
+        subprocess.check_output(f'unzip data/{file} -d data', shell = True)
+    subprocess.check_output(f'hdfs dfs -put .data/*.csv {hdfs_dir}')
+    
     """
     for file in ride_files:
         logger.info(f'hdfs dfs -cp {url}{file} {hdfs_dir}')
@@ -56,7 +64,7 @@ def copy_ride_files_s3_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
         subprocess.check_output(f'mv data/* data/{file.split(".")[0].replace("-tripdata","") + ".csv"}', shell = True)      
         subprocess.check_output(f'hdfs dfs -put data/* {hdfs_dir}', shell = True)
         subprocess.check_output(f'rm data/*', shell = True)
-
+    """
 
 def main():
     try:
