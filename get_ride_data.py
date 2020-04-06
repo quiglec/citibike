@@ -92,6 +92,7 @@ def main():
         copy_ride_files_2_hdfs(URL, trip_hdfs, files_2_copy)
     except Exception:
         logger.error('Unable to retrieve latest ride files')
+        sys.exit(-1)
 
 if __name__ == "__main__":
     logger = logging.getLogger(__name__)
