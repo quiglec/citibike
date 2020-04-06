@@ -48,7 +48,7 @@ def copy_ride_files_2_hdfs(url: str, hdfs_dir: str, ride_files: list):
         subprocess.check_output(f'wget {url}{file} -P data', shell = True)
     for file in ride_files:
         subprocess.check_output(f'unzip data/{file} -d data', shell = True)
-        subprocess.check_output(f'rm data/{file} -d data', shell = True)
+        subprocess.check_output(f'rm data/{file}', shell = True)
     subprocess.check_output(f'hdfs dfs -put .data/*.csv {hdfs_dir}')
 
     """
